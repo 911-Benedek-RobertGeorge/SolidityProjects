@@ -3,7 +3,7 @@
 pragma solidity >=0.6.0 <0.9.0;
 
 /* 
-    Dont get caught in ca crowd funding scam!!! 
+    Dont get caught in a crowd funding scam!!! 
 
     This smart contract has the role of stopping the administrator of a crowd funding 
     to run with your money or to use them in their personal advantage.

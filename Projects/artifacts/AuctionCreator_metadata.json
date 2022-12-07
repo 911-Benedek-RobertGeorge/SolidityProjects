@@ -45,7 +45,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"SmallProjects/Auction.sol": "AuctionCreator"
+			"Projects/Auction.sol": "AuctionCreator"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -59,7 +59,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"SmallProjects/Auction.sol": {
+		"Projects/Auction.sol": {
 			"keccak256": "0x6c8951c0e8a8ad50686bdfd53cef2336a96f772819b65e762be9a84229cce554",
 			"license": "GPL-3.0",
 			"urls": [

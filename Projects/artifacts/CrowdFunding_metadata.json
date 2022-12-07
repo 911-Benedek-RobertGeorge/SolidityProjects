@@ -342,11 +342,11 @@
 	},
 	"sources": {
 		"Projects/CrowdFunding.sol": {
-			"keccak256": "0x86bdc061e9e4fba33dcdb3ac46e4822114521fad5d7d09be806da6cf17a0a0c2",
+			"keccak256": "0x913d4ea3b329ce9781e2561ca9fe3970447a4e36231edb3a75c035ab1ce2adcf",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://f5e4265c1900e72cead30c90242f918720c777a4803690e6b193f9c704bd35b6",
-				"dweb:/ipfs/QmVakdBmwg27wWDf9vmAaR4FDEBJATHqKnPgducXa9hPhd"
+				"bzz-raw://799481ac8fe5557cd610d65a6805c5e4747096daeef664c868ecfe9ce51e2443",
+				"dweb:/ipfs/QmZZX2CAzmQaBQT1KXDgfnuUELXgFY7CUX5FMHwBLRzx5v"
 			]
 		}
 	},
