@@ -202,7 +202,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"Projects/ERC20.sol": "ERC20Interface"
+			"Projects/CryptosICO.sol": "ERC20Interface"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -216,12 +216,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"Projects/ERC20.sol": {
-			"keccak256": "0xd5a64b06c61be58d8986d71b9ea06f08a9fd62b2696e9a8de9dc35814a2f6258",
+		"Projects/CryptosICO.sol": {
+			"keccak256": "0x41558cbab9b658663806934ff975c02bc5ab45c07edc7df9d8613a89b979c51f",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://40a96edb18ff0a1394a978156af330e3c0a54c7b9e272ce086cbb50625146b5d",
-				"dweb:/ipfs/Qmb41xUAWcrLKhvMeQfhbRajD2VjZnj7gEV5sqqDSZCsSv"
+				"bzz-raw://d98e12ad7aa82920c203bdd5f30eeb5a649411b674cadb41709013ca96376cf3",
+				"dweb:/ipfs/QmcMBD9SkKtWGq9e7kbXRvD5Sku19c2rH97YxsbkwX8SUU"
 			]
 		}
 	},

@@ -278,7 +278,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"Projects/ERC20.sol": "Crypto"
+			"Projects/CryptosICO.sol": "Cryptos"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -292,12 +292,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"Projects/ERC20.sol": {
-			"keccak256": "0x2c55d9b1da0c3ee24bd17cc371c341c4ee48fbb9824c4004b856b5688d865924",
+		"Projects/CryptosICO.sol": {
+			"keccak256": "0x41558cbab9b658663806934ff975c02bc5ab45c07edc7df9d8613a89b979c51f",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://705901851c0ce132e4686014a7b51eefff53361a46ce4839058c46e32257ba07",
-				"dweb:/ipfs/QmYX3S7KSvG8tBS8h4eTBVqYpJXErP3yyFEQ9Mb9J64ukH"
+				"bzz-raw://d98e12ad7aa82920c203bdd5f30eeb5a649411b674cadb41709013ca96376cf3",
+				"dweb:/ipfs/QmcMBD9SkKtWGq9e7kbXRvD5Sku19c2rH97YxsbkwX8SUU"
 			]
 		}
 	},
