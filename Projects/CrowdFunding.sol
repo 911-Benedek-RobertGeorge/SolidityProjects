@@ -85,11 +85,14 @@ contract CrowdFunding{
     }
 
     function getRefund() public {
-        require(block.timestamp > deadline,"You cant get a refund until the deadline has passed!");
-        require(raisedAmount < goal ,"Fotunatelly the goal has been reached. Thank you for doing good!");
+        //require(block.timestamp > deadline,"You cant get a refund until the deadline has passed!");
+        //require(raisedAmount < goal ,"Fotunatelly the goal has been reached. Thank you for doing good!");
+        //require(value > 0,"You dont have anything to withdraw!");
+
         uint value = contributors[msg.sender];
-        
-        require(value > 0,"You dont have anything to withdraw!");
+        if(block.timestamp < deadline || raisedAmount >= goal || value < 0){
+            revert("Not eligible for a refund!");
+        }
 
         payable(msg.sender).transfer(value);
         contributors[msg.sender] = 0;
@@ -110,7 +113,7 @@ contract CrowdFunding{
     }
 
     function voteRequest(uint _requestNo) public {
-        require(contributors[msg.sender] > 0,"You must be a contributor to vote!");
+        assert(contributors[msg.sender] > 0 );
         Request storage thisRequest = requests[_requestNo];
         require (thisRequest.voters[msg.sender] == false,"You have already voted!");
         thisRequest.voters[msg.sender] = true;
@@ -118,14 +121,19 @@ contract CrowdFunding{
     }
 
     function makePayment(uint _requestNo) public onlyAdmin{
-        require(raisedAmount >= goal,"Goal not met yet!");
-        Request storage thisRequest = requests[_requestNo];
-        require(thisRequest.completed == false,"The request has been completed!");
-        require(thisRequest.nrOfVoters > nrOfContributors / 2); // > 50% of contributors
+        //require(raisedAmount >= goal,"Goal not met yet!");
+        //require(thisRequest.completed == false,"The request has been completed!");
+        if(raisedAmount >= goal && requests[_requestNo].completed == false){
+            Request storage thisRequest = requests[_requestNo];
+            require(thisRequest.nrOfVoters > nrOfContributors / 2); // > 50% of contributors
 
-        thisRequest.recipient.transfer(thisRequest.value);
-        thisRequest.completed = true;
+            thisRequest.recipient.transfer(thisRequest.value);
+            thisRequest.completed = true;
 
-        emit MakePaymenEvent(thisRequest.recipient,thisRequest.value);
+        emit MakePaymenEvent(thisRequest.recipient,thisRequest.value);  
+        }else{
+            revert();
+        }
+        
     }
 }
