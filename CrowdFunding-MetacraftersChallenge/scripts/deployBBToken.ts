@@ -1,13 +1,13 @@
 import { ethers } from "hardhat";
 
 async function main() {
-	const Factory = await ethers.getContractFactory("TokenICO");
+	const Factory = await ethers.getContractFactory("BenBurgerToken");
 
-	const tokenContract = await Factory.deploy("0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199"); /// add this to dotenv
+	const tokenContract = await Factory.deploy();
 
 	await tokenContract.deployed(); /// just waiting for the block to be included in a block
 
-	console.log(`BenBurgerToken ICO deployed to ${tokenContract.address} `);
+	console.log(`BenBurgerToken deployed to ${tokenContract.address} `);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

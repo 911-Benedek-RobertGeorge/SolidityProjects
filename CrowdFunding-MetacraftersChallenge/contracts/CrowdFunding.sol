@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.8.0 < 0.9.0; /// greater than 0.8.0 to avoid overflows
-
+import './BenBurgerToken.sol';
 /* 
     Dont get caught in a crowd funding scam!!! 
 
@@ -35,6 +35,10 @@ contract CrowdFunding{
     uint public goal;
     uint public raisedAmount;
 
+    ERC20Interface public immutable token;
+   
+    
+
     /// a request for a funding 
     struct Request{
         string description;
@@ -45,7 +49,8 @@ contract CrowdFunding{
         mapping(address => bool) voters;
     }
 
-    mapping(uint => Request) public requests; // we only can use mappings to store something like an array of structs
+    mapping(uint => Request) public requests; // we can only use mappings to store something like an array of structs
+    
     uint public numRequests;
 
      modifier onlyAdmin(){
@@ -58,27 +63,33 @@ contract CrowdFunding{
     event CreateRequestEvent(string _description, address _recipient, uint _value);
     event MakePaymenEvent(address _recipient, uint _value);
 
-    constructor(uint _goal, uint _deadline){
+    constructor(uint _goal, uint _deadline,uint _minimumContribution, address _token ){
         goal = _goal;
         deadline = block.timestamp + _deadline;
-        minimumContribution = 1000000 gwei ; // 0.001 eth
+        minimumContribution = _minimumContribution ;
         admin = msg.sender;
+        token = BenBurgerToken(_token);
     }
 
     receive() payable external{
-        contribute();
+        //contribute();
     }
 
-    function contribute() public payable{
+    function contribute(uint _amount) public payable{
         require(block.timestamp < deadline, "Deadline has passed!");
-        require(msg.value >= minimumContribution, "Minimum Contribution not met!");
+        require(_amount >= minimumContribution, "Minimum Contribution not met!");
         
+        require(token.transferFrom(msg.sender,admin,_amount), "The transfer did not succeded."); // sending the tokens to the admin address 
+
         if(contributors[msg.sender] == 0){ // we only want the different address contributors
             nrOfContributors++;
         }
-        contributors[msg.sender] += msg.value;
-        raisedAmount += msg.value;
-        emit ContributeEvent(msg.sender, msg.value);
+
+        contributors[msg.sender] += _amount;
+        raisedAmount += _amount;
+        
+        
+        emit ContributeEvent(msg.sender, _amount);
     }
     
     function getBalance() public view returns(uint){

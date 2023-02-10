@@ -5,17 +5,16 @@ async function main() {
 
 	const Factory = await ethers.getContractFactory("CrowdFunding");
 
-	const goal = 1000000000;
-	const;
-	const crowdFunding = await Factory.deploy();
+	const goal = 100000;
+	const deadline = 0;
+	const minimumInvestment = 1000;
+	const crowdFunding = await Factory.deploy(goal, deadline, minimumInvestment);
 
 	await crowdFunding.deployed(); /// just waiting for the block to be included in a block
 
 	console.log(`CrowdFunding deployed to ${crowdFunding.address} `);
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
 	console.error(error);
 	process.exitCode = 1;

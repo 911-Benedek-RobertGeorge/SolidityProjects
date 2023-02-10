@@ -27,6 +27,7 @@ contract BenBurgerToken is ERC20Interface{
     uint public override totalSupply;
 
     address public founder;
+
     mapping (address => uint) public balances;
 
     mapping (address => mapping(address => uint)) allowed;
@@ -118,6 +119,7 @@ contract TokenICO is BenBurgerToken{
     function changeDepositAddress(address payable newDeposit) public onlyAdmin{
         deposit = newDeposit;
     }
+    
     function getCurrentState() public view returns(State){
         if(icoState == State.halted){
             return State.halted;
