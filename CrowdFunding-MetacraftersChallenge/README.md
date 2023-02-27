@@ -11,7 +11,9 @@ Your contract(s) should be written such that:
 Functionality
 
 • Code compiles
+
 • Code accomplishes task described in prompt
+
 • Code has no glaring security issues
 • Code is readable and organized
 • Demonstrates ability to create and use modifiers appropriately
