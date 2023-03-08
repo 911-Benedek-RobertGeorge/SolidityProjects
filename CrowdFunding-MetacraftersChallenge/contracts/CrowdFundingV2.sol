@@ -2,32 +2,10 @@
 
 pragma solidity >=0.8.0 < 0.9.0; /// greater than 0.8.0 to avoid overflows
 import './BenBurgerToken.sol';
+ 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
  
-/* 
-    Dont get caught in a crowd funding scam!!! 
-
-    This smart contract has the role of stopping the administrator of a crowd funding 
-    to run with your money or to use them in their personal advantage.
-
-    The person who deploys the contract can choose the goal it want to obtain and a deadline,
-    but he is not going to be able to withdraw the money because they are kept in the smart contract
-    until the contributos have decided where their money would help the most.
-
-    It has a few steps : 
-        - after deploying the administrator make a request of a crowd funding where he has to 
-        provide a description of how those money are going to be used, the address where the 
-        money are going to be sent to and the amount that will be allocated to that cause.
-        -the contributor can now send money to the smart contract and the ether is going to be
-        stored in the smart contract until something has been decided
-        - the contributor have the option to vote for some of the request  and only the requests
-        voted by more than 50% of contributors are going to be proccessed and the money send to 
-        the recipient address only if the goal has been achived
-        - if the deadline passed and the goal was not achived , everybody can request their money back
-*/
-
-
-contract CrowdFunding is Initializable {
+contract CrowdFundingV2 is Initializable {
     mapping(address => uint) public contributors;
     address public admin;
     uint public nrOfContributors;
@@ -69,10 +47,18 @@ contract CrowdFunding is Initializable {
         deadline = block.timestamp + _deadline;
         minimumContribution = _minimumContribution ;
         admin = msg.sender;
-        token = BenBurgerToken(_token);
-   }
-  
-    
+        token = BenBurgerToken(_token) ;
+   } 
+
+    //V2 function
+    function changeMinimumContribution(uint _minimumContribution) public onlyAdmin{
+      minimumContribution = _minimumContribution;
+    }
+
+    receive() payable external{
+       contribute(msg.value);
+    }
+
     function contribute(uint _amount) public {
         require(block.timestamp < deadline, "Deadline has passed!");
         require(_amount >= minimumContribution, "Minimum Contribution not met!");
@@ -94,7 +80,6 @@ contract CrowdFunding is Initializable {
     /// Get the custom token balance of the contract
     function getBalance() public view returns(uint){
         return token.balanceOf(address(this));
-         
     }
 
     function getRefund() public {
@@ -107,7 +92,6 @@ contract CrowdFunding is Initializable {
             revert("Not eligible for a refund!");
         }   
         token.transfer(payable(msg.sender),value);
-         
         contributors[msg.sender] = 0;
 
     }
@@ -141,7 +125,6 @@ contract CrowdFunding is Initializable {
             require(thisRequest.nrOfVoters > nrOfContributors / 2); // > 50% of contributors
             
             token.transfer( thisRequest.recipient, thisRequest.value);
-            
             thisRequest.completed = true;
 
         emit MakePaymenEvent(thisRequest.recipient,thisRequest.value);  
@@ -151,3 +134,4 @@ contract CrowdFunding is Initializable {
         
     }
 }
+ 

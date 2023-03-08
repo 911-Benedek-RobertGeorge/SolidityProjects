@@ -1,12 +1,10 @@
 //SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.8.0 <0.9.0;
-// ----------------------------------------------------------------------------
-// EIP-20: ERC-20 Token Standard
-// https://eips.ethereum.org/EIPS/eip-20
-// -----------------------------------------
+pragma solidity >=0.8.0 <0.9.0; // handles the overflow 
+ 
 
-interface ERC20Interface {
+ 
+interface  IERC20 {
     function totalSupply() external view returns (uint);
     function balanceOf(address tokenOwner) external view returns (uint balance);
     function transfer(address to, uint tokens) external returns (bool success);
@@ -20,29 +18,45 @@ interface ERC20Interface {
 }
 
 
-contract BenBurgerToken is ERC20Interface{
-    string public name = "BenBurgerToken";
-    string public symbol = "BBT";
-    uint public decimals = 10;
-    uint public override totalSupply;
+contract BenBurgerToken is IERC20 {
+ 
+    uint public supply;
+    address payable public  founder;
+    uint tokenPrice = 0.001 ether; 
+    uint public hardCap = 300 ether;
+    uint public raisedAmount = 0;
 
-    address public founder;
+
 
     mapping (address => uint) public balances;
 
     mapping (address => mapping(address => uint)) allowed;
+
     //  0x111... (owner) allows 0x222... (the spender) --- 100 tokens;
     // allowed[0x111...][0x222...] = 100;
-    constructor(){   /// in VSCode it makes me use public for constructor
-        totalSupply = 1000000;
-        founder = msg.sender;
-        balances[founder] = totalSupply;
+
+    constructor()  {    
+        supply = 1000000;
+        founder = payable(msg.sender);
+        balances[founder] = supply;
     }
 
     function balanceOf(address tokenOwner) public view override returns (uint balance){
         return balances[tokenOwner];
     }
+     function decimals() public view virtual returns (uint8){
+         return 10;
 
+     }
+    function symbol() public view virtual returns (string memory) {
+        return "BBT";
+    }
+    function name() public view virtual returns (string memory) {
+        return "BenBurgerToken";
+    }
+    function totalSupply() public view virtual override returns (uint256) {
+            return supply;
+        }
     function transfer(address to, uint tokens) public virtual override returns (bool success){
         require(balances[msg.sender] >= tokens);
 
@@ -71,109 +85,37 @@ contract BenBurgerToken is ERC20Interface{
 
 
     function transferFrom(address from, address to, uint tokens) public virtual override returns (bool success){
-        require(allowed[from][msg.sender] >= tokens);
-        require(balances[from] >= tokens);
+
+        require(allowed[from][to] >= tokens, "You cant take the tokens form another wallet if not allowed.");
+        require(balances[from] >= tokens, "Not enough balance");
         balances[from] -= tokens;
         balances[to] += tokens;
-        allowed[from][msg.sender] -= tokens;
-        
+        allowed[from][to] -= tokens;
         emit Transfer(from, to, tokens);
         return true;
-    }
-}
-
-contract TokenICO is BenBurgerToken{
-    address public admin;
-    address payable public deposit;
-    uint tokenPrice = 0.001 ether; 
-    uint public hardCap = 300 ether;
-    uint public raisedAmount;
-    uint public saleStart = block.timestamp + 0; //3600; //ICO starts 1 hour after deployment
-    uint public saleEnd = block.timestamp + 604800; // ICO ends in one week
-
-    uint public tokenTradeStart = saleEnd + 604800; // the tokens will be transferable after a week of ICO ending
-    uint maxInvestment = 5 ether ;
-    uint public minInvestment = 0.1 ether;
-
-    enum State {beforeStart, running, afterEnd, halted}
-    State public icoState;
-
-    constructor(address payable _deposit){
-        deposit = _deposit;
-        admin = msg.sender;
-        icoState = State.beforeStart;
-    }
-
-    modifier onlyAdmin(){
-        require(msg.sender == admin);
-        _;
-    }
-
-    function halt() public onlyAdmin{
-        icoState = State.halted;
-    }
-
-    function resume() public onlyAdmin{
-        icoState = State.running;
-    }
-    function changeDepositAddress(address payable newDeposit) public onlyAdmin{
-        deposit = newDeposit;
-    }
-    
-    function getCurrentState() public view returns(State){
-        if(icoState == State.halted){
-            return State.halted;
-        }else if(block.timestamp < saleStart){
-            return State.beforeStart;
-        }else if(block.timestamp >= saleStart && block.timestamp < saleEnd){
-            return State.running;
-        }else{
-            return State.afterEnd;
-        }
     }
 
     event Invest(address investor, uint value, uint tokens);
 
-    function invest() payable public returns(bool){
-        icoState = getCurrentState();
-        require(icoState == State.running);
-        require(msg.value >= minInvestment && msg.value <= maxInvestment);
-        raisedAmount += msg.value;
+    function invest(uint value) payable public returns(bool){
+        
+        //require(msg.value >= minInvestment && msg.value <= maxInvestment , "Investement not in range");
+        raisedAmount += value;
         require(raisedAmount <= hardCap);
-
-        uint tokens = msg.value / tokenPrice;
+      
+        uint tokens = value / tokenPrice;
 
         balances[msg.sender] += tokens;
         balances[founder] -= tokens;
-        deposit.transfer(msg.value);
+        founder.transfer(value);
 
-        emit Invest(msg.sender, msg.value, tokens);
+        emit Invest(msg.sender, value, tokens);
 
         return true;
     }
 
     receive() payable external{
-        invest();
-    }
-
-    function transfer(address to, uint tokens) public   override returns (bool success){
-        require(block.timestamp > tokenTradeStart);
-
-         BenBurgerToken.transfer(to,tokens);
-         
-        return true;
-    }
-
-     function transferFrom(address from, address to, uint tokens) public   override returns (bool success){
-        require(block.timestamp > tokenTradeStart);
-        BenBurgerToken.transferFrom(from, to, tokens);
-        return true;
-    }
-
-    function burn() public returns(bool){
-        icoState = getCurrentState();
-        require(icoState == State.afterEnd);
-        balances[founder] = 0;
-        return true;
+        invest(msg.value);
     }
 }
+ 
