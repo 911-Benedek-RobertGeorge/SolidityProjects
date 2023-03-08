@@ -1,3 +1,6 @@
+Video walkthrough : https://www.loom.com/share/13f25f193fcd4647bd6fec8292ddd031
+
+
 Create a crowdfunding campaign where users can pledge funds to and claim funds from the contract.
 
 Your contract(s) should be written such that:
