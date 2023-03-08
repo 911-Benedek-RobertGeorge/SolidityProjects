@@ -1,0 +1,80 @@
+{
+	"compiler": {
+		"version": "0.8.19+commit.7dd6d404"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "operator",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "data",
+						"type": "bytes"
+					}
+				],
+				"name": "onERC721Received",
+				"outputs": [
+					{
+						"internalType": "bytes4",
+						"name": "",
+						"type": "bytes4"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Metacrafters beginner/ERC721.sol": "IERC721Receiver"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Metacrafters beginner/ERC721.sol": {
+			"keccak256": "0xd22fb83e7e214a5c01f8f4302ae04ec56f9b666f45c3f3ea100bc2130d9b1e0c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://eec65db522a70dc7992750709e6c0cbec64ee4468df907fb8ea3a7c96ae6b307",
+				"dweb:/ipfs/QmeUKVbnJBnjUBNWA4dcTdpL3Sd9zDhTPutTSYgJ3C6bYo"
+			]
+		}
+	},
+	"version": 1
+}
